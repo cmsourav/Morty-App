@@ -8,11 +8,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.rickyapp.model.Result
+import com.example.rickyapp.ui.theme.CardBg
 import com.example.rickyapp.ui.theme.PillsTextGrey
 import com.example.rickyapp.ui.theme.PrimaryGrey5
 import com.example.rickyapp.ui.theme.White
@@ -24,21 +28,21 @@ import com.example.rickyapp.ui.utils.VerticalSpace
 
 @Composable
 fun CharacterList(
-    modifier: Modifier = Modifier,
     data: List<Result>,
-    onClick: (Int) -> Unit,
+    onClick: (Result) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
+        modifier = Modifier.padding(top = Dimens.dimen12)
     ) {
-        itemsIndexed(items = data) { index, item ->
+        itemsIndexed(items = data) { _, item ->
             val id = item.id ?: 0
             CharacterCardItem(
                 id = id,
                 image = item.image ?: "",
                 name = item.name ?: "Unknown",
                 status = item.status ?: "Unknown",
-                onClick = { onClick(id) },
+                onClick = { onClick(item) },
             )
         }
     }
@@ -57,12 +61,14 @@ fun CharacterCardItem(
         modifier =
             modifier
                 .fillMaxWidth()
-                .background(White)
-                .padding(Dimens.dimen12)
+                .heightIn(250.dp)
+                .padding(Dimens.dimen8)
                 .clickable(onClick = { onClick(id) }),
         shape = RoundedCornerShape(Dimens.dimen0),
+        colors = CardDefaults.cardColors(CardBg),
+        elevation = CardDefaults.elevatedCardElevation(Dimens.elevation),
     ) {
-        Column {
+        Column(modifier = Modifier.padding(Dimens.dimen4)) {
             Box(
                 modifier =
                     Modifier
@@ -80,6 +86,8 @@ fun CharacterCardItem(
                     text = name,
                     style = 16.MediumStyle,
                     color = PrimaryGrey5,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
                 8.VerticalSpace()
                 Text(

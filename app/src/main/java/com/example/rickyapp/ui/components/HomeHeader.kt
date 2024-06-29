@@ -14,32 +14,34 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rickyapp.R
-import com.example.rickyapp.ui.theme.PillsTextGrey
-import com.example.rickyapp.ui.theme.PrimaryGrey5
+import com.example.rickyapp.ui.theme.SurfaceBg
+import com.example.rickyapp.ui.theme.TopBarColor
 import com.example.rickyapp.ui.theme.White
 import com.example.rickyapp.ui.utils.BoldStyle
 import com.example.rickyapp.ui.utils.Dimens
+import com.example.rickyapp.ui.utils.MediumStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderSection(
-    title : String = "",
-    navIcon : Painter = painterResource(id = R.drawable.baseline_list_24),
+    title: String = "",
+    navIcon: Painter = painterResource(id = R.drawable.baseline_list_24),
+    isActionIconVisible: Boolean = true,
     actionIcon: Painter = painterResource(id = R.drawable.baseline_notifications_none_24),
-    onNavIconClick : () -> Unit = {},
-    onActionIconClick : () -> Unit = {},
+    onNavIconClick: () -> Unit = {},
+    onActionIconClick: () -> Unit = {},
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     CenterAlignedTopAppBar(
         colors =
             TopAppBarDefaults.topAppBarColors(
-                containerColor = White,
+                containerColor = TopBarColor,
             ),
         title = {
             Text(
                 text = title,
-                style = 18.BoldStyle,
-                color = PrimaryGrey5,
+                style = 18.MediumStyle,
+                color = White,
             )
         },
         navigationIcon = {
@@ -47,19 +49,21 @@ fun HeaderSection(
                 Icon(
                     painter = navIcon,
                     contentDescription = "home-screen-drawer-icon",
-                    tint = PillsTextGrey,
+                    tint = SurfaceBg,
                     modifier = Modifier.size(Dimens.topBarListIcon),
                 )
             }
         },
         actions = {
-            IconButton(onClick = { onActionIconClick() }) {
-                Icon(
-                    painter = actionIcon,
-                    contentDescription = "home-screen-search-icon",
-                    tint = PillsTextGrey,
-                    modifier = Modifier.size(Dimens.topBarSearchIcon),
-                )
+            if (isActionIconVisible) {
+                IconButton(onClick = { onActionIconClick() }) {
+                    Icon(
+                        painter = actionIcon,
+                        contentDescription = "home-screen-search-icon",
+                        tint = SurfaceBg,
+                        modifier = Modifier.size(Dimens.topBarSearchIcon),
+                    )
+                }
             }
         },
         scrollBehavior = scrollBehavior,
